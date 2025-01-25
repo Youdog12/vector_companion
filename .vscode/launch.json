@@ -5,7 +5,23 @@
             "name": "Launch Program",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/app.py"
+            "program": "${workspaceFolder}/app.py",
+            "env": {
+                "ENV_VAR1": "value1",
+                "ENV_VAR2": "value2"
+            },
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Debug Tests",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/tests/test_runner.py",
+            "env": {
+                "ENV_VAR1": "value1",
+                "ENV_VAR2": "value2"
+            },
+            "console": "integratedTerminal"
         }
     ]
 }
