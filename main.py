@@ -549,6 +549,15 @@ agent_config = [
 dialogue_dir_axiom = r"dialogue_text_axiom.txt" # deprecated
 dialogue_dir_axis = r"dialogue_text_axis.txt" # deprecated
 
+# Define agents' personality traits
+agents_personality_traits = {
+    "axiom": ["adventurous", "bold", "humorous"],
+    "axis": ["cynical", "sarcastic", "sharp"],
+    "fractal": ["curious", "creative", "morbid"],
+    "sigma": ["manipulative", "selfish", "troublemaker"],
+    "vector": ["helpful", "harmless", "logical"]
+}
+
 # Chat Agents
 axiom = config.Agent("axiom", "Male, heterosexual", agents_personality_traits['axiom'], system_prompt_axiom1, system_prompt_axiom2, agent_config[0]['dialogue_list'], language_model, agent_config[0]['speaker_wav'], agent_config[0]["extraversion"])
 axis = config.Agent("axis", "Female, lesbian", agents_personality_traits['axis'], system_prompt_axis1, system_prompt_axis2, agent_config[1]['dialogue_list'], language_model, agent_config[1]['speaker_wav'], agent_config[1]["extraversion"])
