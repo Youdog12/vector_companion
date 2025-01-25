@@ -13,7 +13,6 @@ import asyncio
 from PIL import Image
 import wave
 import pyaudio
-import audioop
 
 
 
@@ -45,7 +44,6 @@ class Agent():
         self.trait_set = []
         self.dialogue_list = dialogue_list
         self.language_model = language_model
-        self.extroversion = extraversion
         self.extraversion = extraversion
         self.speaker_wav = speaker_wav
         self.messages = []
@@ -532,7 +530,7 @@ def record_audio(
             p = pyaudio.PyAudio()
             stream = p.open(format=FORMAT,
                             channels=CHANNELS,
-    import audioop
+                            rate=RATE,
                             input=True)
 
             try:
@@ -559,18 +557,19 @@ def record_audio(
         print(f"An error occurred in record_audio: {e}")
         return None
 
-                        audio: str,
-                        WAVE_OUTPUT_FILENAME: str,
-                        FORMAT: int, CHANNELS: int,
-                        RATE: int,
-                        CHUNK: int,
-                        RECORD_SECONDS: int,
-                        file_index_count: int,
-                        can_speak_event: bool,
-                        model: Any,
-                        model_name: str
-                        ):
-
+def record_audio_output(
+    audio: str,
+    WAVE_OUTPUT_FILENAME: str,
+    FORMAT: int,
+    CHANNELS: int,
+    RATE: int,
+    CHUNK: int,
+    RECORD_SECONDS: int,
+    file_index_count: int,
+    can_speak_event: bool,
+    model: Any,
+    model_name: str
+):
     file_index = 0
     global audio_transcriptions
     audio_transcriptions = ""
@@ -662,7 +661,7 @@ def record_audio(
 
         frames = []
 
-def transcribe_audio(model: Any, model_name, WAVE_OUTPUT_FILENAME: str, RATE: int = 16000) -> str:
+def transcribe_audio(model: Any, model_name: str, WAVE_OUTPUT_FILENAME: str, RATE: int = 16000) -> str:
 
     """
     Transcribes audio via whisper
@@ -695,12 +694,12 @@ def transcribe_audio(model: Any, model_name, WAVE_OUTPUT_FILENAME: str, RATE: in
         return ""
 
     options = whisper.DecodingOptions(
-    task="translate",
-    language="en",
-    prompt=None,
-    prefix=None,
-    suppress_blank=True,
-    fp16=True,
+        task="translate",
+        language="en",
+        prompt=None,
+        prefix=None,
+        suppress_blank=True,
+        fp16=True
     )
 
     result = whisper.decode(model, mel, options)

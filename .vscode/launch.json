@@ -11,9 +11,9 @@
                 "ENV_VAR2": "value2"
             },
             "console": "integratedTerminal"
-        },
-{
-    "name": "Debug Tests",
+    },
+    {
+"name": "Debug Tests",
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/tests/test_runner.py",
@@ -37,9 +37,9 @@
                             "remoteRoot": "/remote/workspace"
                         }
                     ]
-                },
+        },
         {
-                    "name": "Run Module",
+            "name": "Run Module",
                     "type": "debugpy",
                     "request": "launch",
                     "module": "mymodule",
@@ -48,9 +48,9 @@
                         "ENV_VAR2": "value2"
                     },
                     "console": "integratedTerminal"
-                },
+        },
         {
-                    "name": "Run with Arguments",
+            "name": "Run with Arguments",
                     "type": "debugpy",
                     "request": "launch",
                     "program": "${workspaceFolder}/app.py",
@@ -60,9 +60,9 @@
                         "ENV_VAR2": "value2"
                     },
                     "console": "integratedTerminal"
-                },
+        },
         {
-                    "name": "Run Flask",
+            "name": "Run Flask",
                     "type": "debugpy",
                     "request": "launch",
                     "module": "flask",
@@ -74,9 +74,9 @@
                     },
                     "args": ["run", "--no-debugger", "--no-reload"],
                     "console": "integratedTerminal"
-                },
+        },
         {
-                    "name": "Run Django",
+            "name": "Run Django",
                     "type": "debugpy",
                     "request": "launch",
                     "program": "${workspaceFolder}/manage.py",
@@ -86,9 +86,9 @@
                         "ENV_VAR2": "value2"
                     },
                     "console": "integratedTerminal"
-                },
+        },
         {
-                    "name": "Run Jupyter Notebook",
+            "name": "Run Jupyter Notebook",
                     "type": "debugpy",
                     "request": "launch",
                     "program": "jupyter",
@@ -98,9 +98,9 @@
                         "ENV_VAR2": "value2"
                     },
                     "console": "integratedTerminal"
-                },
+        },
         {
-                    "name": "Run Script with Interpreter",
+            "name": "Run Script with Interpreter",
                     "type": "debugpy",
                     "request": "launch",
                     "program": "${workspaceFolder}/script.py",
@@ -109,9 +109,9 @@
                         "ENV_VAR2": "value2"
                     },
                     "console": "integratedTerminal"
-                },
+        },
         {
-                    "name": "Debug Program (Windows)",
+            "name": "Debug Program (Windows)",
                     "type": "debugpy",
                     "request": "launch",
                     "program": "${workspaceFolder}/app.py",

@@ -33,7 +33,7 @@ torch.backends.cudnn.deterministic = True
 can_speak_event_asyncio = asyncio.Event()
 can_speak_event_asyncio.set()
 can_speak_event = threading.Event()
-audio_playback_lock = asyncio.Lock()
+audio_playback_lock = None
 
 # Event to signal when user recording is complete
 recording_complete_event = threading.Event()
@@ -344,7 +344,7 @@ def voice_output_async():
         for agent in agent_config:
             play_voice_output(agent)
 
-def play_voice_output(agent: str) -> bool:
+def play_voice_output(agent: dict) -> bool:
     """
     Play audio file of assigned agent.
 
@@ -821,4 +821,5 @@ async def main():
             continue
 
 if __name__ == "__main__":
+    audio_playback_lock = asyncio.Lock()
     asyncio.run(main())
