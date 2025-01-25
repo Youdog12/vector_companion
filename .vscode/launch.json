@@ -3,7 +3,7 @@
     "configurations": [
         {
             "name": "Launch Program",
-            "type": "debugpy",
+            "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/main.py",
             "env": {
@@ -14,7 +14,7 @@
         },
         {
             "name": "Debug Tests",
-            "type": "debugpy",
+            "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/tests/test_runner.py",
             "env": {
@@ -25,7 +25,7 @@
         },
         {
             "name": "Attach to Remote",
-            "type": "debugpy",
+            "type": "python",
             "request": "attach",
             "host": "localhost",
             "port": 5678,
@@ -38,7 +38,7 @@
         },
         {
             "name": "Run Module",
-            "type": "debugpy",
+            "type": "python",
             "request": "launch",
             "module": "mymodule",
             "env": {
