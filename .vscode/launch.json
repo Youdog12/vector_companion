@@ -58,6 +58,32 @@
                 "ENV_VAR2": "value2"
             },
             "console": "integratedTerminal"
+        },
+        {
+            "name": "Run Flask",
+            "type": "python",
+            "request": "launch",
+            "module": "flask",
+            "env": {
+                "FLASK_APP": "app.py",
+                "FLASK_ENV": "development",
+                "ENV_VAR1": "value1",
+                "ENV_VAR2": "value2"
+            },
+            "args": ["run", "--no-debugger", "--no-reload"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Run Django",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/manage.py",
+            "args": ["runserver"],
+            "env": {
+                "ENV_VAR1": "value1",
+                "ENV_VAR2": "value2"
+            },
+            "console": "integratedTerminal"
         }
     ]
 }
