@@ -13,6 +13,7 @@ import asyncio
 from PIL import Image
 import wave
 import pyaudio
+import audioop
 
 
 
@@ -350,13 +351,15 @@ def split_buffer_into_sentences(buffer):
     """
     sentence_endings = re.compile(r'([.!?])')
     sentences = []
-    while ii < 10:  # Add a condition to break the loop after 10 iterations
+    iteration_count = 0
+    while iteration_count < 10:  # Add a condition to break the loop after 10 iterations
         match = sentence_endings.search(buffer)
         if match:
             end = match.end()
             sentence = buffer[:end].strip()
             sentences.append(sentence)
             buffer = buffer[end:]
+            iteration_count += 1
         else:
             break
     return sentences, buffer
@@ -514,51 +517,48 @@ def view_image_ocr(vision_model: Any, processor: Any):
 #-------------------------------------------------AUDIO PROCESSING---------------------------------------------#
 
 def record_audio(
-    audio: str,
-    WAVE_OUTPUT_FILENAME: str,
     FORMAT: int,
     RATE: int,
     CHANNELS: int,
     CHUNK: int,
-    RECORD_SECONDS: int,
-    THRESHOLD: int,
-    SILENCE_LIMIT: int,
-    vision_model: str,
-    processor: str,
     can_speak_event: bool
 ) -> Optional[bool]:
     global image_lock
     import pyaudio
     import audioop
 
-    ii = 0
-    recording_index = 0
-
     try:
         while True:
             p = pyaudio.PyAudio()
             stream = p.open(format=FORMAT,
                             channels=CHANNELS,
-                            rate=RATE,
-                            input=True,
-                            frames_per_buffer=CHUNK)
+    import audioop
+                            input=True)
 
-            while True:
-                try:
+            try:
+                while True:
                     data = stream.read(CHUNK, exception_on_overflow=False)
-                except IOError as e:
-                    print(f"Error reading audio stream: {e}")
-                    continue
+                    rms = audioop.rms(data, 2)  # width=2 for format=paInt16
 
-                rms = audioop.rms(data, 2)  # width=2 for format=paInt16
+                    # Add a break condition to exit the loop
+                    if rms < 100:  # Example condition: break if the audio level is too low
+                        break
 
-                # ... (rest of the function remains the same)
+                    # ... (rest of the function remains the same)
+
+            except Exception as e:
+                print(f"Error reading audio stream: {e}")
+                continue
+
+            finally:
+                stream.stop_stream()
+                stream.close()
+                p.terminate()
 
     except Exception as e:
         print(f"An error occurred in record_audio: {e}")
         return None
 
-def record_audio_output(
                         audio: str,
                         WAVE_OUTPUT_FILENAME: str,
                         FORMAT: int, CHANNELS: int,
