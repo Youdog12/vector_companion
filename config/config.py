@@ -436,54 +436,6 @@ def view_image(vision_model: Any, processor: Any):
     Views a screenshot and captions it to provide a description.
     """
 
-    """global image_lock
-
-    try:
-
-        image_lock = True
-
-        image_picture = pygi.screenshot("axiom_screenshot.png")
-
-        time.sleep(5)
-
-        prompt = "<MORE_DETAILED_CAPTION>"
-
-        #image_picture = pygi.screenshot("axiom_screenshot.png")
-
-        image_file = "axiom_screenshot.png"
-        image = Image.open(image_file)
-
-        device = "cuda:1"
-        inputs = processor(text=prompt, images=image, return_tensors="pt")
-        #inputs = {k: v.to(device) for k, v in inputs.items()}
-
-        generated_ids = vision_model.generate(
-            input_ids=inputs["input_ids"].to(device),
-            pixel_values=inputs["pixel_values"].to(device),
-            max_new_tokens=1000,
-            do_sample=True,
-            num_beams=10
-        )
-
-        generated_ids.to('cpu')
-            
-        generated_text = processor.batch_decode(generated_ids, skip_special_tokens=False)[0]
-        parsed_answer = processor.post_process_generation(generated_text, task="<MORE_DETAILED_CAPTION>", image_size=(image.width, image.height))
-
-        # Get the current time
-        current_time = datetime.now().time()
-
-        with open("screenshot_description.txt", "a", encoding='utf-8') as f:
-            f.write(f"\n\nScreenshot Contents at {current_time.strftime('%H:%M:%S')}: \n\n"+parsed_answer['<MORE_DETAILED_CAPTION>'])
-
-        #view_image_ocr(vision_model, processor)
-
-        image_lock = False
-    except Exception as e:
-        image_lock = False
-        print("Error:", e)
-        pass"""
-
     global image_lock
         
     if not image_lock:

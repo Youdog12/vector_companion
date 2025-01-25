@@ -1,10 +1,10 @@
 # Vector Companion
 
-Your friendly AI Companion, with two distinct personalities: Axiom, Axis and the gang! Here to accompany you everywhere you go on your computer!
+Your friendly AI Companion, with three distinct personalities: Axiom, Axis, and Fractal! Here to accompany you everywhere you go on your computer!
 
-![image](https://github.com/user-attachments/assets/11cbbdec-51fb-4551-938a-3ff40fe4432f)
+![image](https://github.com/user-attachments/assets/11cbbdec-51fb-4551-938a-3ff40fe4432f.png)
 
-![image](https://github.com/user-attachments/assets/f14a50e5-74e4-48a9-8e82-d9c0b5432b2a)
+![image](https://github.com/user-attachments/assets/f14a50e5-74e4-48a9-8e82-d9c0b5432b2a.png)
 
 ## Table of Contents
 
@@ -43,13 +43,14 @@ They transcribe audio output and user microphone input simultaneously while peri
 
 ### Cloning
 
-```
+```sh
 git clone https://github.com/SingularityMan/vector_companion.git
 cd vector_companion
 conda create --name vector_companion
 conda activate vector_companion
 pip install -r requirements.txt
 ```
+
 ### Configuring VB Cable-Compatible Headset
 On Windows, install VB Cable so Python can listen to the computer's audio output in real-time.
 Once installed, link VB Cable to the device (presumably your headset) via Windows Sound settings so Python can accurately capture the sound.
@@ -58,14 +59,15 @@ Ensure VB Cable is selected as your speaker once it is configured, otherwise Vec
 ### Usage
 After meeting the necessary prerequisites, installing the required dependencies, and configuring then troubleshooting any VB Cable issues (listed below), simply run main.py.
 
-```
+```sh
 conda activate vector_companion
 python main.py
 ```
+
 ### Troubleshooting VB Cable and Microphone Issues
 If you successfully installed VB Cable and correctly linked it to the device of your choice but the framework isn't capturing computer audio (and therefore not transcribing it), review the `input_device_index` keyword parameter in `p.open()` under the `record_audio_output()` function in `config/config.py`. The script may or may not link to the correct device index. If you have multiple devices, it might incorrectly pick the wrong one. If this is the case, try manually assigning the index starting from index 0 and work your way up. You may receive streaming errors with each attempt:
 
-```
+```python
 def record_audio_output(audio, WAVE_OUTPUT_FILENAME, FORMAT, CHANNELS, RATE, CHUNK, RECORD_SECONDS, file_index_count):
 
     global can_speak
@@ -100,14 +102,14 @@ def record_audio_output(audio, WAVE_OUTPUT_FILENAME, FORMAT, CHANNELS, RATE, CHU
                         rate=RATE,
                         input=True,
                         frames_per_buffer=CHUNK,
-                        input_device_index=device_index) <------------------------------------- device_index
+                        input_device_index=device_index)  # <------------------------------------- device_index
 
         print("* recording Audio Transcript")
 ```
 
 You will also most likely need to modify the `input_device_index` keyword argument under `audio.open()` in `record_audio()` to select the right microphone index for your headset, which is set to 1 by default. If no audio input is being captured, follow similar steps with `record_audio()` in `config/config.py`:
 
-```
+```python
 def record_audio(audio, WAVE_OUTPUT_FILENAME, FORMAT, RATE, CHANNELS, CHUNK, RECORD_SECONDS, THRESHOLD, SILENCE_LIMIT, vision_model, processor):
 
     global image_lock
@@ -125,22 +127,24 @@ def record_audio(audio, WAVE_OUTPUT_FILENAME, FORMAT, RATE, CHANNELS, CHUNK, REC
                 continue
 
             # Start Recording
-            stream = audio.open(format=FORMAT, channels=CHANNELS, rate=RATE, input=True, input_device_index=1, frames_per_buffer=CHUNK) <------------------------------- device index
+            stream = audio.open(format=FORMAT, channels=CHANNELS, rate=RATE, input=True, input_device_index=1, frames_per_buffer=CHUNK)  # <------------------------------- device index
             #print("waiting for speech...")
             frames = []
             image_path = None
 ```
-# Installing flash_attn on Windows
-### Installing Microsoft Visual Studio Code 
+
+### Installing flash_attn on Windows
+
+#### Installing Microsoft Visual Studio Code 
 Install Microsoft Visual Studio Code's latest version (2022) that is compatible with your CUDA version (12.2 or greater) and in the installer, make sure to include these capabilities:
    - MSVC v143 - VS 2022 C++ x64/x86 build tools (x86 & x84)
    - C++ CMake Tools for Windows
    - Windows 10 or Windows 11 SDK, depending on your Windows OS
 
-### Installing Torch/Cuda
+#### Installing Torch/Cuda
 After that, install a version of `torch` compatible with your CUDA version that is compatible with MSVC.
 
-### Building flash_attn from source
+#### Building flash_attn from source
 Lastly, make sure to carefully edit then run `flash-attn-clone-source-compile-stable-torch.bat` in order to build flash_attn from source. Make sure to edit the file to compile flash_attn for a version compatible with your torch/CUDA and your python version.
 
 ### Contributing

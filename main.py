@@ -30,7 +30,6 @@ from pydub import AudioSegment
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 from comtypes import CLSCTX_ALL, CoInitialize, CoUninitialize
 
-#from config.config import *
 import config.config as config
 
 torch.backends.cudnn.benchmark = False
@@ -209,7 +208,7 @@ async def queue_agent_responses(
                 prompt = contextual_information+prompt
             
             previous_agent = agent.agent_name
-            previous_agent_gender = agent.agent_gender    
+            previous_agent_gender = agent.agent_name    
 
         messages, agent_messages, sentence_generator = await agent.generate_text_stream(
             messages[-5:],
@@ -576,8 +575,7 @@ vectorAgent = config.VectorAgent(language_model)
 agents = [
     axiom,
     axis,
-    #fractal,
-    #sigma,
+    fractal,
     vector
     ]
 
