@@ -11,15 +11,15 @@ from ctypes import cast, POINTER
 from PIL import Image
 import aiofiles
 import aiohttp
-import whisper
+
 import pyaudio
+import whisper
 import sounddevice as sd
-import audioop
+import numpy as np
 import simpleaudio as sa
 from transformers import AutoProcessor, AutoModelForCausalLM
 from TTS.api import TTS
 import torch
-from torch.quantization import quantize_dynamic
 from pydub import AudioSegment
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 from comtypes import CLSCTX_ALL, CoInitialize, CoUninitialize
@@ -44,7 +44,7 @@ recording_complete_event = threading.Event()
 #processor = AutoProcessor.from_pretrained(vision_path, trust_remote_code=True)
 #vision_model.to('cuda:1')
 model_name = "base" # Replace this with whichever whisper model you'd like.
-model = whisper.load_model(model_name, device='cuda:0')
+model = whisper.load_model(model_name)
 tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2", progress_bar=True).to('cuda:0')
 tts.synthesizer.use_cuda = True
 tts.synthesizer.fp16 = True
@@ -328,10 +328,9 @@ async def play_audio(audio_data, sample_rate):
     Asynchronously plays the audio data.
     """
     try:
-        async with audio_playback_lock:
-            await asyncio.get_event_loop().run_in_executor(
-                None, lambda: sd.play(audio_data, samplerate=sample_rate)
-            )
+            audio_data = np.frombuffer(audio_data, dtype=np.int16)
+            sd.play(audio_data, samplerate=sample_rate)
+            sd.wait()
             await asyncio.get_event_loop().run_in_executor(None, sd.wait)
     except Exception as e:
         print(f"Error during audio playback: {e}")
@@ -644,7 +643,7 @@ async def main():
     global can_speak_event_asyncio
     global analysis_mode
     global mute_mode
-        user_memory_task = None
+    user_memory_task = None
     
     async def process_user_memory(agent, messages, agent_messages, user_voice_output, user_memory):
         """
@@ -806,7 +805,7 @@ async def main():
                     )
                 )
 
-                    await user_memory_task
+                await user_memory_task
                 try:
                     user_memory_task.result()
                 except Exception as e:
