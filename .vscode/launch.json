@@ -89,8 +89,8 @@
             "name": "Run Jupyter Notebook",
             "type": "python",
             "request": "launch",
-            "program": "notebook",
-            "args": ["${workspaceFolder}/notebook.ipynb"],
+            "program": "jupyter",
+            "args": ["notebook", "${workspaceFolder}/notebook.ipynb"],
             "env": {
                 "ENV_VAR1": "value1",
                 "ENV_VAR2": "value2"
@@ -132,6 +132,19 @@
                 "ENV_VAR2": "value2"
             },
             "console": "integratedTerminal"
+        },
+        {
+            "name": "Debug Program (Windows)",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/app.py",
+            "pythonPath": "C:\\Python39\\python.exe",
+            "env": {
+                "ENV_VAR1": "value1",
+                "ENV_VAR2": "value2"
+            },
+            "console": "integratedTerminal",
+            "justMyCode": false
         }
     ]
 }
