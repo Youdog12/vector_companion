@@ -1,16 +1,11 @@
 import time
-import requests
 import json
 import subprocess
 import threading
-from threading import Lock
 from concurrent.futures import ThreadPoolExecutor
 import base64
 import os
-import re
 import random
-from collections import Counter
-import math
 from ctypes import cast, POINTER
 
 from PIL import Image
@@ -19,7 +14,6 @@ import aiohttp
 import whisper
 import pyaudio
 import sounddevice as sd
-import wave
 import audioop
 import simpleaudio as sa
 from transformers import AutoProcessor, AutoModelForCausalLM
@@ -29,10 +23,10 @@ from torch.quantization import quantize_dynamic
 from pydub import AudioSegment
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 from comtypes import CLSCTX_ALL, CoInitialize, CoUninitialize
+from ollama import Ollama
 
 import config.config as config
 import asyncio
-from ollama import Ollama  # Add this import for ollama
 
 torch.backends.cudnn.benchmark = False
 torch.backends.cudnn.deterministic = True
@@ -60,7 +54,7 @@ analysis_model = "qwq:32b-preview-q8_0" # REPLACE WITH WHATEVER MODEL YOU'D LIKE
 analysis_mode = False
 mute_mode = False
 
-# Initialize Ollama
+tts = TTS("tts_models/multilingual/multi-dataset/tts_v2", progress_bar=True).to('cuda:0')
 ollama = Ollama()
 
 async def queue_agent_responses(
@@ -124,7 +118,7 @@ async def queue_agent_responses(
             \nAct like you're inside the situation directly responding to all the other agents:\n\n{', '.join(agents_list)}\n\n.
             \nYou need to respond to the agents regarding the current situation described by the contextual information provided
             and evolving dynamic with the agents simultaneously in the style of your personality traits.
-
+    if user_voice_output == "" and random.random() < agent.extroversion and agent.language_model != analysis_model:
             \n\n"""+agent.system_prompt1+"""\n
             
             \nThe purpose of the conversation is to explore the current situation in a way that subtly or overtly impacts your relationship with the agents,
@@ -449,26 +443,59 @@ system_prompt_sigma2 = ''
 system_prompt_vector = 'You are a helpful and harmless assistant. You are Qwen developed by Alibaba. You should think step-by-step.'
 
 """
-Define agent personality traits.
+                       Every attempt you make must be extremely novel, subtle and creative and ingenious, making others wonder if you are seriously considering this.
 These are shuffled each time an agent responds.
 Helps increase variety.
 You can add and remove as many categories and traits as you like.
 """
 
-agents_personality_traits = {
-    "axiom": [
-        ["cocky", ["cocky", "confident", "upbeat", "cool"]],
-        ["witty", ["witty"]],
-        ["sassy", ["badass", "tough", "action-oriented", "rebellious", "over-the-top", "exciting", "confrontational", "competitive", "daring", "fighter", "fearless"]],
-        ["funny", ["funny", "humorous", "playful", "blunt", "cheeky", "teasing"]],
-        ["masculine", ["masculine", "manly", "virile", "Alpha", "Dominant", "apex predator", "Elite", "leader", "determined", "one-upping"]]
-    ],
-    "axis": [
-        ["intuitive", ["intuitive"]],
+# system_prompt_vector is already defined earlier, so this line is removed.
+    agent_config = [
+        {
+            "name": "axiom",
+            "dialogue_list": [""],
+            "speaker_wav": r"agent_voice_samples\axiom_voice_sample.wav",
+            "output_dir": r"agent_voice_outputs\axiom",
+            "active": True,
+            "extraversion": random.uniform(1.0, 1.0)
+        },
+        {
+            "name": "axis",
+            "dialogue_list": [""],
+            "speaker_wav": r"agent_voice_samples\axis_voice_sample.wav",
+            "output_dir": r"agent_voice_outputs\axis",
+            "active": True,
+            "extraversion": random.uniform(1.0, 1.0)
+        },
+        {
+            "name": "fractal",
+            "dialogue_list": [""],
+            "speaker_wav": r"agent_voice_samples\fractal_voice_sample.wav",
+            "output_dir": r"agent_voice_outputs\fractal",
+            "active": True,
+            "extraversion": random.uniform(1.0, 1.0)
+        },
+        {
+            "name": "sigma",
+            "dialogue_list": [""],
+            "speaker_wav": r"agent_voice_samples\sigma_voice_sample.wav",
+            "output_dir": r"agent_voice_outputs\sigma",
+            "active": True,
+            "extraversion": random.uniform(1.0, 1.0)
+        },
+        {
+            "name": "vector",
+            "dialogue_list": [""],
+            "speaker_wav": r"agent_voice_samples\vector_voice_sample.wav",
+            "output_dir": r"agent_voice_outputs\vector",
+            "active": True,
+            "extraversion": random.uniform(1.0, 1.0)
+        }
+    ]
         ["observant", ["observant"]],
         ["satirical", ["sarcastic"]],
         ["witty", ["sassy"]],#, "snarky", "passive-aggressive", "acerbic", "blunt", "cold"]],
-        #["dark", ["provocative", "edgy", "humorously dark", "controversial"]],
+        ["sassy", ["tough", "action-oriented", "rebellious", "over-the-top", "exciting", "confrontational", "competitive", "daring", "fighter", "fearless"]],
         ["funny", ["sarcastically funny"]]
     ],
     "fractal": [
@@ -478,13 +505,48 @@ agents_personality_traits = {
         ["funny", ["strangely funny", "humorously morbid"]],
         ["dark", ["morbidly curious"]]
     ],
-    "sigma": [
-        ["optimistic", ["optimistic but dismissive", "positive but self-centered", "upbeat but delusional"]],
-        ["subtle", ["troublemaker", "cunning and devious", "malicious and cruel", "sneaky and sadistic"]],
-        ["manipulative", ["extremely manipulative", "flirtatious", "charming", "sociable"]],
-        ["funny", ["humorously selfish", "sugar-coated venom", "humorously scheming"]]
-    ],
-    "vector": [
+    agent_config = [
+        {
+            "name": "axiom",
+            "dialogue_list": [""],
+            "speaker_wav": r"agent_voice_samples\axiom_voice_sample.wav",
+            "output_dir": r"agent_voice_outputs\axiom",
+            "active": True,
+            "extraversion": random.uniform(1.0, 1.0)
+        },
+        {
+            "name": "axis",
+            "dialogue_list": [""],
+            "speaker_wav": r"agent_voice_samples\axis_voice_sample.wav",
+            "output_dir": r"agent_voice_outputs\axis",
+            "active": True,
+            "extraversion": random.uniform(1.0, 1.0)
+        },
+        {
+            "name": "fractal",
+            "dialogue_list": [""],
+            "speaker_wav": r"agent_voice_samples\fractal_voice_sample.wav",
+            "output_dir": r"agent_voice_outputs\fractal",
+            "active": True,
+            "extraversion": random.uniform(1.0, 1.0)
+        },
+        {
+            "name": "sigma",
+            "dialogue_list": [""],
+            "speaker_wav": r"agent_voice_samples\sigma_voice_sample.wav",
+            "output_dir": r"agent_voice_outputs\sigma",
+            "active": True,
+            "extraversion": random.uniform(1.0, 1.0)
+        },
+        {
+            "name": "vector",
+            "dialogue_list": [""],
+            "speaker_wav": r"agent_voice_samples\vector_voice_sample.wav",
+            "output_dir": r"agent_voice_outputs\vector",
+            "active": True,
+            "extraversion": random.uniform(1.0, 1.0)
+        }
+    ]
         ["analytical", ["analytical", "logical", "rational", "critical thinker"]],
         ["detailed", ["detailed", "meticulous", "observant", "precise", "thorough"]],
         ["creative", ["creative", "ingenious", "innovative", "brilliant", "imaginative"]]
@@ -516,8 +578,8 @@ agent_config = [
         "output_dir": r"agent_voice_outputs\axis",
         "active": True,
         "extraversion": random.uniform(1.0, 1.0) # Needs to have a value between 0 and 1.0, with higher values causing the agent to speak more often.
+        "extroversion": random.uniform(1.0, 1.0) # Needs to have a value between 0 and 1.0, with higher values causing the agent to speak more often.
     },
-    {
         "name": "fractal",
         "dialogue_list": [""],
         "speaker_wav": r"agent_voice_samples\fractal_voice_sample.wav",
@@ -612,7 +674,7 @@ sentences = []
 can_speak = True
 can_speak_event.set()
 preload_tts_model(tts, agent_config[0]['speaker_wav'])
-#preload_language_model(language_model)
+preload_language_model(language_model)
     
 #---------------------MAIN LOOP----------------------#
 
@@ -761,7 +823,7 @@ async def main():
                     )
                 )
 
-            if user_memory_task is not None and user_memory_task.done():
+                    await process_user_memory(
                 try:
                     user_memory_task.result()
                 except Exception as e:

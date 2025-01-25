@@ -3,7 +3,7 @@
     "configurations": [
         {
             "name": "Launch Program",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/main.py",
             "env": {
@@ -14,7 +14,7 @@
         },
 {
     "name": "Debug Tests",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/tests/test_runner.py",
             "env": {
@@ -24,103 +24,104 @@
             "console": "integratedTerminal"
         },
         {
-            "name": "Attach to Remote",
-            "type": "python",
-            "request": "attach",
-            "host": "localhost",
-            "port": 5678,
-            "pathMappings": [
-                {
-                    "localRoot": "${workspaceFolder}",
-                    "remoteRoot": "/remote/workspace"
+                    "name": "Attach to Remote",
+                    "type": "debugpy",
+                    "request": "attach",
+                    "connect": {
+                        "host": "localhost",
+                        "port": 5678
+                    },
+                    "pathMappings": [
+                        {
+                            "localRoot": "${workspaceFolder}",
+                            "remoteRoot": "/remote/workspace"
+                        }
+                    ]
+                },
+        {
+                    "name": "Run Module",
+                    "type": "debugpy",
+                    "request": "launch",
+                    "module": "mymodule",
+                    "env": {
+                        "ENV_VAR1": "value1",
+                        "ENV_VAR2": "value2"
+                    },
+                    "console": "integratedTerminal"
+                },
+        {
+                    "name": "Run with Arguments",
+                    "type": "debugpy",
+                    "request": "launch",
+                    "program": "${workspaceFolder}/app.py",
+                    "args": ["--arg1", "value1", "--arg2", "value2"],
+                    "env": {
+                        "ENV_VAR1": "value1",
+                        "ENV_VAR2": "value2"
+                    },
+                    "console": "integratedTerminal"
+                },
+        {
+                    "name": "Run Flask",
+                    "type": "debugpy",
+                    "request": "launch",
+                    "module": "flask",
+                    "env": {
+                        "FLASK_APP": "${workspaceFolder}/app.py",
+                        "FLASK_ENV": "development",
+                        "ENV_VAR1": "value1",
+                        "ENV_VAR2": "value2"
+                    },
+                    "args": ["run", "--no-debugger", "--no-reload"],
+                    "console": "integratedTerminal"
+                },
+        {
+                    "name": "Run Django",
+                    "type": "debugpy",
+                    "request": "launch",
+                    "program": "${workspaceFolder}/manage.py",
+                    "args": ["runserver"],
+                    "env": {
+                        "ENV_VAR1": "value1",
+                        "ENV_VAR2": "value2"
+                    },
+                    "console": "integratedTerminal"
+                },
+        {
+                    "name": "Run Jupyter Notebook",
+                    "type": "debugpy",
+                    "request": "launch",
+                    "program": "jupyter",
+                    "args": ["notebook", "${workspaceFolder}/notebook.ipynb"],
+                    "env": {
+                        "ENV_VAR1": "value1",
+                        "ENV_VAR2": "value2"
+                    },
+                    "console": "integratedTerminal"
+                },
+        {
+                    "name": "Run Script with Interpreter",
+                    "type": "debugpy",
+                    "request": "launch",
+                    "program": "${workspaceFolder}/script.py",
+                    "env": {
+                        "ENV_VAR1": "value1",
+                        "ENV_VAR2": "value2"
+                    },
+                    "console": "integratedTerminal"
+                },
+        {
+                    "name": "Debug Program (Windows)",
+                    "type": "debugpy",
+                    "request": "launch",
+                    "program": "${workspaceFolder}/app.py",
+                    "python": "C:/Python39/python.exe",
+                    "env": {
+                        "ENV_VAR1": "value1",
+                        "ENV_VAR2": "value2"
+                    },
+                    "console": "integratedTerminal",
+                    "justMyCode": false
                 }
-            ]
-        },
-        {
-            "name": "Run Module",
-            "type": "python",
-            "request": "launch",
-            "module": "mymodule",
-            "env": {
-                "ENV_VAR1": "value1",
-                "ENV_VAR2": "value2"
-            },
-            "console": "integratedTerminal"
-        },
-        {
-            "name": "Run with Arguments",
-            "type": "python",
-            "request": "launch",
-            "program": "${workspaceFolder}/app.py",
-            "args": ["--arg1", "value1", "--arg2", "value2"],
-            "env": {
-                "ENV_VAR1": "value1",
-                "ENV_VAR2": "value2"
-            },
-            "console": "integratedTerminal"
-        },
-        {
-            "name": "Run Flask",
-            "type": "python",
-            "request": "launch",
-            "module": "flask",
-            "env": {
-                "FLASK_APP": "${workspaceFolder}/app.py",
-                "FLASK_ENV": "development",
-                "ENV_VAR1": "value1",
-                "ENV_VAR2": "value2"
-            },
-            "args": ["run", "--no-debugger", "--no-reload"],
-            "console": "integratedTerminal"
-        },
-        {
-            "name": "Run Django",
-            "type": "python",
-            "request": "launch",
-            "program": "${workspaceFolder}/manage.py",
-            "args": ["runserver"],
-            "env": {
-                "ENV_VAR1": "value1",
-                "ENV_VAR2": "value2"
-            },
-            "console": "integratedTerminal"
-        },
-        {
-            "name": "Run Jupyter Notebook",
-            "type": "python",
-            "request": "launch",
-            "program": "jupyter",
-            "args": ["notebook", "${workspaceFolder}/notebook.ipynb"],
-            "env": {
-                "ENV_VAR1": "value1",
-                "ENV_VAR2": "value2"
-            },
-            "console": "integratedTerminal"
-        },
-        {
-            "name": "Run Script with Interpreter",
-            "type": "python",
-            "request": "launch",
-            "program": "${workspaceFolder}/script.py",
-            "pythonPath": "/usr/bin/python3",
-            "env": {
-                "ENV_VAR1": "value1",
-                "ENV_VAR2": "value2"
-            },
-            "console": "integratedTerminal"
-        },
-        {
-            "name": "Debug Program (Windows)",
-            "type": "python",
-            "request": "launch",
-            "program": "${workspaceFolder}/app.py",
-            "pythonPath": "C:/Python39/python.exe",
-            "env": {
-                "ENV_VAR1": "value1",
-                "ENV_VAR2": "value2"
-            },
-            "console": "integratedTerminal",
-            "justMyCode": false
-        }
     ]
 }

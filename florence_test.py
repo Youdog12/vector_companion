@@ -3,14 +3,15 @@ from PIL import Image
 from transformers import AutoProcessor, AutoModelForCausalLM
 import torch
 
+
 # Check if a GPU is available
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Load the model and processor
-model = AutoModelForCausalLM.from_pretrained("microsoft/Florence-2-large-ft", trust_remote_code=True)
+model = AutoModelForCausalLM.from_pretrained("microsoft/Florence-2-large", trust_remote_code=True)
 model.to(device)  # Move model to GPU if available
 
-processor = AutoProcessor.from_pretrained("microsoft/Florence-2-large-ft", trust_remote_code=True)
+processor = AutoProcessor.from_pretrained("microsoft/Florence-2-large", trust_remote_code=True)
 
 prompt = "<OCR>"
 
