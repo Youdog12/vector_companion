@@ -89,8 +89,8 @@
             "name": "Run Jupyter Notebook",
             "type": "python",
             "request": "launch",
-            "program": "jupyter",
-            "args": ["notebook", "${workspaceFolder}/notebook.ipynb"],
+            "program": "notebook",
+            "args": ["${workspaceFolder}/notebook.ipynb"],
             "env": {
                 "ENV_VAR1": "value1",
                 "ENV_VAR2": "value2"
@@ -103,6 +103,30 @@
             "request": "launch",
             "program": "${workspaceFolder}/app.py",
             "pythonPath": "C:\\Python39\\python.exe",
+            "env": {
+                "ENV_VAR1": "value1",
+                "ENV_VAR2": "value2"
+            },
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Run Script with Interpreter",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/script.py",
+            "pythonPath": "/usr/bin/python3",
+            "env": {
+                "ENV_VAR1": "value1",
+                "ENV_VAR2": "value2"
+            },
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Launch Program (HP Computer)",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/app.py",
+            "pythonPath": "C:\\HP\\Python39\\python.exe",
             "env": {
                 "ENV_VAR1": "value1",
                 "ENV_VAR2": "value2"
