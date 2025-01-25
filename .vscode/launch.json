@@ -3,9 +3,9 @@
     "configurations": [
         {
             "name": "Launch Program",
-            "type": "node",
+            "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/app.js"
+            "program": "${workspaceFolder}/app.py"
         }
     ]
 }
