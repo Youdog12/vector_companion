@@ -84,6 +84,18 @@
                 "ENV_VAR2": "value2"
             },
             "console": "integratedTerminal"
+        },
+        {
+            "name": "Run Jupyter Notebook",
+            "type": "python",
+            "request": "launch",
+            "program": "jupyter",
+            "args": ["notebook", "${workspaceFolder}/notebook.ipynb"],
+            "env": {
+                "ENV_VAR1": "value1",
+                "ENV_VAR2": "value2"
+            },
+            "console": "integratedTerminal"
         }
     ]
 }
