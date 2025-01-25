@@ -6,7 +6,7 @@
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/app.py",
-            "pythonPath": "C:\\Python39\\python.exe",
+            "pythonPath": "C:/Python39/python.exe",
             "env": {
                 "ENV_VAR1": "value1",
                 "ENV_VAR2": "value2"
@@ -99,18 +99,6 @@
             "console": "integratedTerminal"
         },
         {
-            "name": "Launch Program (Windows)",
-            "type": "python",
-            "request": "launch",
-            "program": "${workspaceFolder}/app.py",
-            "pythonPath": "C:\\Python39\\python.exe",
-            "env": {
-                "ENV_VAR1": "value1",
-                "ENV_VAR2": "value2"
-            },
-            "console": "integratedTerminal"
-        },
-        {
             "name": "Run Script with Interpreter",
             "type": "python",
             "request": "launch",
@@ -123,23 +111,11 @@
             "console": "integratedTerminal"
         },
         {
-            "name": "Launch Program (HP Computer)",
-            "type": "python",
-            "request": "launch",
-            "program": "${workspaceFolder}/app.py",
-            "pythonPath": "C:\\HP\\Python39\\python.exe",
-            "env": {
-                "ENV_VAR1": "value1",
-                "ENV_VAR2": "value2"
-            },
-            "console": "integratedTerminal"
-        },
-        {
             "name": "Debug Program (Windows)",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/app.py",
-            "pythonPath": "C:\\Python39\\python.exe",
+            "pythonPath": "C:/Python39/python.exe",
             "env": {
                 "ENV_VAR1": "value1",
                 "ENV_VAR2": "value2"
