@@ -520,14 +520,13 @@ def record_audio(
     CHUNK: int,
     _unused_can_speak_event: bool
 ) -> Optional[bool]:
-    global image_lock
     import pyaudio
     import audioop
 
     try:
         while True:
-            p = pyaudio.PyAudio()
-            stream = p.open(format=FORMAT,
+            audio_interface = pyaudio.PyAudio()
+            stream = audio_interface.open(format=FORMAT,
                             channels=CHANNELS,
                             rate=RATE,
                             input=True)
@@ -550,7 +549,7 @@ def record_audio(
             finally:
                 stream.stop_stream()
                 stream.close()
-                p.terminate()
+                audio_interface.terminate()
 
     except Exception as e:
         print(f"An error occurred in record_audio: {e}")
