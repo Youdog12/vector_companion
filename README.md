@@ -29,6 +29,7 @@ They transcribe audio output and user microphone input simultaneously while peri
 - Can hear and transcribe computer audio in real-time (English only due to base model size Whisper language limitations but you may replace base with WhisperV3 Turbo for multilingual support).
 - Can hear user microphone input in real-time (English only due to base model size Whisper language limitations but you may replace base with WhisperV3 Turbo for multilingual support).
 - Voice Cloning enables distinct voice output generation for agents Axiom and Axis.
+- Analysis Mode for detailed contextual analysis and response generation.
 
 ## Installation
 

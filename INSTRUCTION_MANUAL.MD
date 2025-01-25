@@ -6,7 +6,9 @@ Vector Companion is a very powerful and versatile but may be hard to understand 
 
 In the current version, Vector Companion is divided between two different modes: `Chat Mode` and `Analysis Mode.`
 
-To enable and disable analysis mode, simply including "Analysis mode on" or "Analysis Mode off" in your message. Depending on your available VRAM, the model you choose and Ollama's configuration, Ollama will either load the model or replace the `language_model` with the `analysis_model` in `main.py` and vice versa.
+To enable and disable analysis mode, simply include "Analysis mode on" or "Analysis Mode off" in your message. 
+To enable and disable mute mode, simply include "Mute mode on" or "Mute Mode off" in your message. 
+Depending on your available VRAM, the model you choose and Ollama's configuration, Ollama will either load the model or replace the `language_model` with the `analysis_model` in `main.py` and vice versa.
 
 ### Chat Mode
 

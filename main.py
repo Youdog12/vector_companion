@@ -336,30 +336,23 @@ async def play_audio(audio_data, sample_rate):
     try:
         async with audio_playback_lock:
             loop = config.asyncio.get_event_loop()
-            # Play the audio asynchronously
             await loop.run_in_executor(
                 None, lambda: sd.play(audio_data, samplerate=sample_rate)
             )
-            # Wait until the audio has finished playing
             await loop.run_in_executor(None, sd.wait)
     except Exception as e:
         print(f"Error during audio playback: {e}")
 
 def voice_output_async():
-
     """
-
     Controls the flow of the agent voice output generation and playback.
     Needs to be done asynchronously in order to check if each agents' directories are empty in real-time.
-    
     """
-    
     while True:
         for agent in agent_config:
             play_voice_output(agent)
 
 def play_voice_output(agent: str) -> bool:
-
     """
     Play audio file of assigned agent.
 
@@ -371,18 +364,13 @@ def play_voice_output(agent: str) -> bool:
     Parameter:
 
     agent: specified agent
-
     """
-    
     output_dir = agent["output_dir"]
 
     while len(os.listdir(output_dir)) > 0:
-        
         can_speak_event.clear()
-        
         file_path = os.path.join(output_dir, os.listdir(output_dir)[0])
         try:
-            
             wave_obj = sa.WaveObject.from_wave_file(file_path)
             play_obj = wave_obj.play()
             play_obj.wait_done()
@@ -766,7 +754,6 @@ async def main():
 
             if user_voice_output != "" and not analysis_mode and not mute_mode:
                 user_memory_task = None
-                # Schedule the task without awaiting it
                 user_memory_task = config.asyncio.create_task(
                     process_user_memory(
                         agents[0],
@@ -777,15 +764,13 @@ async def main():
                     )
                 )
 
-            # Inside your main loop, after scheduling the task
             if user_memory_task is not None and user_memory_task.done():
                 try:
-                    # Retrieve the result or handle exceptions
                     user_memory_task.result()
                 except Exception as e:
                     print(f"Error in process_user_memory: {e}")
                 finally:
-                    user_memory_task = None  # Reset the task variable
+                    user_memory_task = None
 
             can_speak_event_asyncio.set()
             can_speak_event.set()
@@ -795,6 +780,5 @@ async def main():
             await config.asyncio.sleep(0.1)
             continue
 
-# Run the main loop
 if __name__ == "__main__":
     config.asyncio.run(main())
