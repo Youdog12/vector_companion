@@ -19,7 +19,8 @@ picture = "axiom_screenshot.png"
 image = Image.open(picture)
 
 # Preprocess the inputs
-inputs = processor(text=prompt, images=image, return_tensors="pt").to(device)
+inputs = processor(text=prompt, images=image, return_tensors="pt")
+inputs = {k: v.to(device) for k, v in inputs.items()}
 
 print("Viewing image...")
 # Generate the output
