@@ -31,14 +31,15 @@ from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 from comtypes import CLSCTX_ALL, CoInitialize, CoUninitialize
 
 import config.config as config
+import asyncio
 
 torch.backends.cudnn.benchmark = False
 torch.backends.cudnn.deterministic = True
-lock = Lock()
+can_speak_event_asyncio = asyncio.Event()
 can_speak_event_asyncio = config.asyncio.Event()
 can_speak_event_asyncio.set()
 can_speak_event = threading.Event()
-can_speak_event.set()
+audio_playback_lock = asyncio.Lock()
 audio_playback_lock = config.asyncio.Lock()
 
 # Event to signal when user recording is complete
@@ -295,12 +296,12 @@ async def queue_agent_responses(
                 break
             audio_data, sample_rate = item
             await play_audio(audio_data, sample_rate)
-
+    await asyncio.gather(process_sentences(), play_audio_queue())
     await config.asyncio.gather(process_sentences(), play_audio_queue())
 
     print(f"[AGENT {agent.agent_name} RESPONSE COMPLETED]")
 
-async def process_user_memory(agent, messages, agent_messages, user_voice_output, user_memory):
+    _, __, generated_text = await asyncio.to_thread(
     _, __, generated_text = await config.asyncio.to_thread(
         agent.generate_text,
         messages[-2:],
@@ -335,7 +336,7 @@ async def play_audio(audio_data, sample_rate):
     """
     try:
         async with audio_playback_lock:
-            loop = config.asyncio.get_event_loop()
+            await asyncio.get_event_loop().run_in_executor(
             await loop.run_in_executor(
                 None, lambda: sd.play(audio_data, samplerate=sample_rate)
             )
@@ -410,7 +411,7 @@ def preload_language_model(language_model):
         for chunk in stream:
             pass  # Consume the stream to trigger loading
         print("Language model preloaded.")
-
+    asyncio.run(preload())
     config.asyncio.run(preload())
 
 def preload_tts_model(tts, speaker_wav):
@@ -638,7 +639,7 @@ async def main():
     while True:
 
         if not can_speak_event_asyncio.is_set():
-            print("Waiting for response to complete...")
+            await asyncio.sleep(0.05)
             await config.asyncio.sleep(0.05)
             continue
 
@@ -776,9 +777,9 @@ async def main():
             can_speak_event.set()
 
         else:
-            print("Dialogue in progress...")
+            await asyncio.sleep(0.1)
             await config.asyncio.sleep(0.1)
             continue
 
-if __name__ == "__main__":
+    asyncio.run(main())
     config.asyncio.run(main())
