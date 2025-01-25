@@ -457,6 +457,48 @@ agent_config = [
         "speaker_wav": r"agent_voice_samples\axiom_voice_sample.wav",
         "output_dir": r"agent_voice_outputs\axiom",
         "active": True,
+        "extraversion": random.uniform(1.0, 1.0) # Needs to have a value between 0 and 1.0, with higher values causing the agent to speak more often.
+    },
+    {
+        "name": "axis",
+        "dialogue_list": [""],
+        "speaker_wav": r"agent_voice_samples\axis_voice_sample.wav",
+        "output_dir": r"agent_voice_outputs\axis",
+        "active": True,
+        "extraversion": random.uniform(1.0, 1.0), # Needs to have a value between 0 and 1.0, with higher values causing the agent to speak more often.
+        "extroversion": random.uniform(1.0, 1.0) # Needs to have a value between 0 and 1.0, with higher values causing the agent to speak more often.
+    },
+    {
+        "name": "fractal",
+        "dialogue_list": [""],
+        "speaker_wav": r"agent_voice_samples\fractal_voice_sample.wav",
+        "output_dir": r"agent_voice_outputs\fractal",
+        "active": True,
+        "extraversion": random.uniform(1.0, 1.0) # Needs to have a value between 0 and 1.0, with higher values causing the agent to speak more often.
+    },
+    {
+        "name": "sigma",
+        "dialogue_list": [""],
+        "speaker_wav": r"agent_voice_samples\sigma_voice_sample.wav",
+        "output_dir": r"agent_voice_outputs\sigma",
+        "active": True,
+        "extraversion": random.uniform(1.0, 1.0) # Needs to have a value between 0 and 1.0, with higher values causing the agent to speak more often.
+    },
+    {
+        "name": "vector",
+        "dialogue_list": [""],
+        "speaker_wav": r"agent_voice_samples\vector_voice_sample.wav",
+        "output_dir": r"agent_voice_outputs\vector",
+        "active": True,
+        "extraversion": random.uniform(1.0, 1.0) # Needs to have a value between 0 and 1.0, with higher values causing the agent to speak more often.
+    }
+]
+    {
+        "name": "axiom",
+        "dialogue_list": [""],
+        "speaker_wav": r"agent_voice_samples\axiom_voice_sample.wav",
+        "output_dir": r"agent_voice_outputs\axiom",
+        "active": True,
         "extraversion": random.uniform(1.0, 1.0)
     },
     {
