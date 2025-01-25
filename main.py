@@ -450,108 +450,48 @@ You can add and remove as many categories and traits as you like.
 """
 
 # system_prompt_vector is already defined earlier, so this line is removed.
-    agent_config = [
-        {
-            "name": "axiom",
-            "dialogue_list": [""],
-            "speaker_wav": r"agent_voice_samples\axiom_voice_sample.wav",
-            "output_dir": r"agent_voice_outputs\axiom",
-            "active": True,
-            "extraversion": random.uniform(1.0, 1.0)
-        },
-        {
-            "name": "axis",
-            "dialogue_list": [""],
-            "speaker_wav": r"agent_voice_samples\axis_voice_sample.wav",
-            "output_dir": r"agent_voice_outputs\axis",
-            "active": True,
-            "extraversion": random.uniform(1.0, 1.0)
-        },
-        {
-            "name": "fractal",
-            "dialogue_list": [""],
-            "speaker_wav": r"agent_voice_samples\fractal_voice_sample.wav",
-            "output_dir": r"agent_voice_outputs\fractal",
-            "active": True,
-            "extraversion": random.uniform(1.0, 1.0)
-        },
-        {
-            "name": "sigma",
-            "dialogue_list": [""],
-            "speaker_wav": r"agent_voice_samples\sigma_voice_sample.wav",
-            "output_dir": r"agent_voice_outputs\sigma",
-            "active": True,
-            "extraversion": random.uniform(1.0, 1.0)
-        },
-        {
-            "name": "vector",
-            "dialogue_list": [""],
-            "speaker_wav": r"agent_voice_samples\vector_voice_sample.wav",
-            "output_dir": r"agent_voice_outputs\vector",
-            "active": True,
-            "extraversion": random.uniform(1.0, 1.0)
-        }
-    ]
-        ["observant", ["observant"]],
-        ["satirical", ["sarcastic"]],
-        ["witty", ["sassy"]],#, "snarky", "passive-aggressive", "acerbic", "blunt", "cold"]],
-        ["sassy", ["tough", "action-oriented", "rebellious", "over-the-top", "exciting", "confrontational", "competitive", "daring", "fighter", "fearless"]],
-        ["funny", ["sarcastically funny"]]
-    ],
-    "fractal": [
-        ["unconventional", ["unconventional", "unorthodox", "lateral thinker"]],
-        ["creative", ["creative", "ingenious", "spontaneous"]],
-        ["unusual", ["bizarre", "outlandish", "weird"]],
-        ["funny", ["strangely funny", "humorously morbid"]],
-        ["dark", ["morbidly curious"]]
-    ],
-    agent_config = [
-        {
-            "name": "axiom",
-            "dialogue_list": [""],
-            "speaker_wav": r"agent_voice_samples\axiom_voice_sample.wav",
-            "output_dir": r"agent_voice_outputs\axiom",
-            "active": True,
-            "extraversion": random.uniform(1.0, 1.0)
-        },
-        {
-            "name": "axis",
-            "dialogue_list": [""],
-            "speaker_wav": r"agent_voice_samples\axis_voice_sample.wav",
-            "output_dir": r"agent_voice_outputs\axis",
-            "active": True,
-            "extraversion": random.uniform(1.0, 1.0)
-        },
-        {
-            "name": "fractal",
-            "dialogue_list": [""],
-            "speaker_wav": r"agent_voice_samples\fractal_voice_sample.wav",
-            "output_dir": r"agent_voice_outputs\fractal",
-            "active": True,
-            "extraversion": random.uniform(1.0, 1.0)
-        },
-        {
-            "name": "sigma",
-            "dialogue_list": [""],
-            "speaker_wav": r"agent_voice_samples\sigma_voice_sample.wav",
-            "output_dir": r"agent_voice_outputs\sigma",
-            "active": True,
-            "extraversion": random.uniform(1.0, 1.0)
-        },
-        {
-            "name": "vector",
-            "dialogue_list": [""],
-            "speaker_wav": r"agent_voice_samples\vector_voice_sample.wav",
-            "output_dir": r"agent_voice_outputs\vector",
-            "active": True,
-            "extraversion": random.uniform(1.0, 1.0)
-        }
-    ]
-        ["analytical", ["analytical", "logical", "rational", "critical thinker"]],
-        ["detailed", ["detailed", "meticulous", "observant", "precise", "thorough"]],
-        ["creative", ["creative", "ingenious", "innovative", "brilliant", "imaginative"]]
-    ]
-}
+agent_config = [
+    {
+        "name": "axiom",
+        "dialogue_list": [""],
+        "speaker_wav": r"agent_voice_samples\axiom_voice_sample.wav",
+        "output_dir": r"agent_voice_outputs\axiom",
+        "active": True,
+        "extraversion": random.uniform(1.0, 1.0)
+    },
+    {
+        "name": "axis",
+        "dialogue_list": [""],
+        "speaker_wav": r"agent_voice_samples\axis_voice_sample.wav",
+        "output_dir": r"agent_voice_outputs\axis",
+        "active": True,
+        "extraversion": random.uniform(1.0, 1.0)
+    },
+    {
+        "name": "fractal",
+        "dialogue_list": [""],
+        "speaker_wav": r"agent_voice_samples\fractal_voice_sample.wav",
+        "output_dir": r"agent_voice_outputs\fractal",
+        "active": True,
+        "extraversion": random.uniform(1.0, 1.0)
+    },
+    {
+        "name": "sigma",
+        "dialogue_list": [""],
+        "speaker_wav": r"agent_voice_samples\sigma_voice_sample.wav",
+        "output_dir": r"agent_voice_outputs\sigma",
+        "active": True,
+        "extraversion": random.uniform(1.0, 1.0)
+    },
+    {
+        "name": "vector",
+        "dialogue_list": [""],
+        "speaker_wav": r"agent_voice_samples\vector_voice_sample.wav",
+        "output_dir": r"agent_voice_outputs\vector",
+        "active": True,
+        "extraversion": random.uniform(1.0, 1.0)
+    }
+]
 
 # Deprecated
 temperature = 0.3
@@ -823,7 +763,7 @@ async def main():
                     )
                 )
 
-                    await process_user_memory(
+                    pass  # Placeholder for process_user_memory call
                 try:
                     user_memory_task.result()
                 except Exception as e:

@@ -350,7 +350,7 @@ def split_buffer_into_sentences(buffer):
     """
     sentence_endings = re.compile(r'([.!?])')
     sentences = []
-    while True:
+    while ii < 10:  # Add a condition to break the loop after 10 iterations
         match = sentence_endings.search(buffer)
         if match:
             end = match.end()

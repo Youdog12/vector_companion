@@ -1,6 +1,6 @@
 import requests
 from PIL import Image
-from transformers import AutoProcessor, AutoModelForCausalLM
+from transformers import BlipProcessor, BlipForConditionalGeneration
 import torch
 
 
@@ -8,10 +8,10 @@ import torch
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Load the model and processor
-model = AutoModelForCausalLM.from_pretrained("microsoft/Florence-2-large", trust_remote_code=True)
+model = BlipForConditionalGeneration.from_pretrained("Salesforce/blip-image-captioning-large")
 model.to(device)  # Move model to GPU if available
 
-processor = AutoProcessor.from_pretrained("microsoft/Florence-2-large", trust_remote_code=True)
+processor = BlipProcessor.from_pretrained("Salesforce/blip-image-captioning-large")
 
 prompt = "<OCR>"
 
@@ -36,10 +36,4 @@ generated_ids = model.generate(
 
 print("Processing...")
 generated_text = processor.batch_decode(generated_ids, skip_special_tokens=False)[0]
-parsed_answer = processor.post_process_generation(
-        generated_text, 
-        task='<OCR>', 
-        image_size=(image.width, image.height)
-    )
-
-print(parsed_answer)
+print(generated_text)
