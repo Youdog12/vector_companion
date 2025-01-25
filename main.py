@@ -32,15 +32,14 @@ from comtypes import CLSCTX_ALL, CoInitialize, CoUninitialize
 
 import config.config as config
 import asyncio
+from ollama import Ollama  # Add this import for ollama
 
 torch.backends.cudnn.benchmark = False
 torch.backends.cudnn.deterministic = True
 can_speak_event_asyncio = asyncio.Event()
-can_speak_event_asyncio = config.asyncio.Event()
 can_speak_event_asyncio.set()
 can_speak_event = threading.Event()
 audio_playback_lock = asyncio.Lock()
-audio_playback_lock = config.asyncio.Lock()
 
 # Event to signal when user recording is complete
 recording_complete_event = threading.Event()
@@ -61,6 +60,8 @@ analysis_model = "qwq:32b-preview-q8_0" # REPLACE WITH WHATEVER MODEL YOU'D LIKE
 analysis_mode = False
 mute_mode = False
 
+# Initialize Ollama
+ollama = Ollama()
 
 async def queue_agent_responses(
     agent,
@@ -144,8 +145,8 @@ async def queue_agent_responses(
             \nFollow these instructions without mentioning them."""
         )
 
-        if len(messages[-5:]) >= 5:
-            messages[-5:][0] = contextual_information
+        if len(messages) >= 5:
+            messages[-5] = contextual_information
         else:
             prompt = contextual_information+prompt
 
@@ -266,7 +267,7 @@ async def queue_agent_responses(
                             await audio_queue.put((audio_data, tts_sample_rate))
                             
                 if "final answer" in sentence.strip().lower() and not final_response:
-                    audio_data = await config.synthesize_sentence(tts, "analysis Complete.", speaker_wav)
+                    audio_data = await config.synthesize_sentence(tts, "Analysis Complete.", speaker_wav)
                     if audio_data is not None:
                         await audio_queue.put((audio_data, tts_sample_rate))
                     final_response = True
@@ -297,12 +298,10 @@ async def queue_agent_responses(
             audio_data, sample_rate = item
             await play_audio(audio_data, sample_rate)
     await asyncio.gather(process_sentences(), play_audio_queue())
-    await config.asyncio.gather(process_sentences(), play_audio_queue())
 
     print(f"[AGENT {agent.agent_name} RESPONSE COMPLETED]")
 
     _, __, generated_text = await asyncio.to_thread(
-    _, __, generated_text = await config.asyncio.to_thread(
         agent.generate_text,
         messages[-2:],
         agent_messages[-2:],
@@ -337,10 +336,9 @@ async def play_audio(audio_data, sample_rate):
     try:
         async with audio_playback_lock:
             await asyncio.get_event_loop().run_in_executor(
-            await loop.run_in_executor(
                 None, lambda: sd.play(audio_data, samplerate=sample_rate)
             )
-            await loop.run_in_executor(None, sd.wait)
+            await asyncio.get_event_loop().run_in_executor(None, sd.wait)
     except Exception as e:
         print(f"Error during audio playback: {e}")
 
@@ -406,13 +404,12 @@ def preload_language_model(language_model):
                 }
             )
 
-        loop = config.asyncio.get_event_loop()
+        loop = asyncio.get_event_loop()
         stream = await loop.run_in_executor(None, run_chat)
         for chunk in stream:
             pass  # Consume the stream to trigger loading
         print("Language model preloaded.")
     asyncio.run(preload())
-    config.asyncio.run(preload())
 
 def preload_tts_model(tts, speaker_wav):
     print("Preloading TTS model...")
@@ -557,8 +554,8 @@ fractal = config.Agent("fractal", "Male, heterosexual", agents_personality_trait
 sigma = config.Agent("sigma", "Female, bisexual", agents_personality_traits['sigma'], system_prompt_sigma1, "", agent_config[3]['dialogue_list'], language_model, agent_config[3]['speaker_wav'], agent_config[3]["extraversion"])
 
 # Analysis Agent
-vector = config.Agent("vector", "Male", agents_personality_traits['vector'], system_prompt_vector, system_prompt_vector, agent_config[2]['dialogue_list'], analysis_model, agent_config[2]['speaker_wav'], agent_config[2]["extraversion"])
-vectorAgent = config.VectorAgent(language_model)
+vector = config.Agent("vector", "Male", agents_personality_traits['vector'], system_prompt_vector, system_prompt_vector, agent_config[4]['dialogue_list'], analysis_model, agent_config[4]['speaker_wav'], agent_config[4]["extraversion"])
+vectorAgent = config.VectorAgent(analysis_model)
 
 # List of agents
 agents = [
@@ -640,7 +637,6 @@ async def main():
 
         if not can_speak_event_asyncio.is_set():
             await asyncio.sleep(0.05)
-            await config.asyncio.sleep(0.05)
             continue
 
         with open('screenshot_description.txt', 'w', encoding='utf-8') as f:
@@ -755,7 +751,7 @@ async def main():
 
             if user_voice_output != "" and not analysis_mode and not mute_mode:
                 user_memory_task = None
-                user_memory_task = config.asyncio.create_task(
+                user_memory_task = asyncio.create_task(
                     process_user_memory(
                         agents[0],
                         messages,
@@ -778,8 +774,7 @@ async def main():
 
         else:
             await asyncio.sleep(0.1)
-            await config.asyncio.sleep(0.1)
             continue
 
+if __name__ == "__main__":
     asyncio.run(main())
-    config.asyncio.run(main())

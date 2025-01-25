@@ -24,8 +24,7 @@ import pyaudio
 import wave
 import audioop
 import simpleaudio as sa
-from PIL import Image
-import pyautogui as pygi
+import pyautogui
 from transformers import AutoProcessor, AutoModelForCausalLM
 import soundfile as sf
 import torch

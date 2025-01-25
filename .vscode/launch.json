@@ -12,8 +12,8 @@
             },
             "console": "integratedTerminal"
         },
-        {
-            "name": "Debug Tests",
+{
+    "name": "Debug Tests",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/tests/test_runner.py",
