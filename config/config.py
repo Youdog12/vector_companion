@@ -6,7 +6,6 @@ import random
 from collections import Counter
 import time
 from datetime import datetime
-import threading
 import base64
 from typing import Any, List, Tuple, Optional, Union, AsyncGenerator
 import asyncio
@@ -519,7 +518,7 @@ def record_audio(
     RATE: int,
     CHANNELS: int,
     CHUNK: int,
-    can_speak_event: bool
+    _unused_can_speak_event: bool
 ) -> Optional[bool]:
     global image_lock
     import pyaudio
