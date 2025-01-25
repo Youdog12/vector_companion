@@ -22,6 +22,42 @@
                 "ENV_VAR2": "value2"
             },
             "console": "integratedTerminal"
+        },
+        {
+            "name": "Attach to Remote",
+            "type": "python",
+            "request": "attach",
+            "host": "localhost",
+            "port": 5678,
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}",
+                    "remoteRoot": "/remote/workspace"
+                }
+            ]
+        },
+        {
+            "name": "Run Module",
+            "type": "python",
+            "request": "launch",
+            "module": "mymodule",
+            "env": {
+                "ENV_VAR1": "value1",
+                "ENV_VAR2": "value2"
+            },
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Run with Arguments",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/app.py",
+            "args": ["--arg1", "value1", "--arg2", "value2"],
+            "env": {
+                "ENV_VAR1": "value1",
+                "ENV_VAR2": "value2"
+            },
+            "console": "integratedTerminal"
         }
     ]
 }
