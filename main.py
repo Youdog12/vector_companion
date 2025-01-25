@@ -119,14 +119,14 @@ async def queue_agent_responses(
             \nYou need to respond to the agents regarding the current situation described by the contextual information provided
             and evolving dynamic with the agents simultaneously in the style of your personality traits.
     if user_voice_output == "" and random.random() < agent.extroversion and agent.language_model != analysis_model:
-            \n\n"""+agent.system_prompt1+"""\n
+            \n\n""" + agent.system_prompt1 + """\n
             
             \nThe purpose of the conversation is to explore the current situation in a way that subtly or overtly impacts your relationship with the agents,
             leading to changes in trust, respect, conflict, bonding, bickering, or camaraderie with each other.
             \nYour response should reflect how the interaction affects your relationship with the agents (e.g. growing frustration, taking sides,
             admiration, disagreement, bickering, respect, collaboration, comforting,
             conflict, drama, alliances, rivalries, etc.) and guide the conversation accordingly
-            while paying close attention to the current situation based one the images and audio transcript.
+            while paying close attention to the current situation based on the images and audio transcript.
             
             \nAvoid breaking immersion.
             \nDon't get too stuck on the subject. Gradually pivot in order to maintain relevance.
@@ -295,7 +295,7 @@ async def queue_agent_responses(
 
     print(f"[AGENT {agent.agent_name} RESPONSE COMPLETED]")
 
-    _, __, generated_text = await asyncio.to_thread(
+    _, _, generated_text = await asyncio.to_thread(
         agent.generate_text,
         messages[-2:],
         agent_messages[-2:],
@@ -493,47 +493,6 @@ agent_config = [
         "extraversion": random.uniform(1.0, 1.0) # Needs to have a value between 0 and 1.0, with higher values causing the agent to speak more often.
     }
 ]
-    {
-        "name": "axiom",
-        "dialogue_list": [""],
-        "speaker_wav": r"agent_voice_samples\axiom_voice_sample.wav",
-        "output_dir": r"agent_voice_outputs\axiom",
-        "active": True,
-        "extraversion": random.uniform(1.0, 1.0)
-    },
-    {
-        "name": "axis",
-        "dialogue_list": [""],
-        "speaker_wav": r"agent_voice_samples\axis_voice_sample.wav",
-        "output_dir": r"agent_voice_outputs\axis",
-        "active": True,
-        "extraversion": random.uniform(1.0, 1.0)
-    },
-    {
-        "name": "fractal",
-        "dialogue_list": [""],
-        "speaker_wav": r"agent_voice_samples\fractal_voice_sample.wav",
-        "output_dir": r"agent_voice_outputs\fractal",
-        "active": True,
-        "extraversion": random.uniform(1.0, 1.0)
-    },
-    {
-        "name": "sigma",
-        "dialogue_list": [""],
-        "speaker_wav": r"agent_voice_samples\sigma_voice_sample.wav",
-        "output_dir": r"agent_voice_outputs\sigma",
-        "active": True,
-        "extraversion": random.uniform(1.0, 1.0)
-    },
-    {
-        "name": "vector",
-        "dialogue_list": [""],
-        "speaker_wav": r"agent_voice_samples\vector_voice_sample.wav",
-        "output_dir": r"agent_voice_outputs\vector",
-        "active": True,
-        "extraversion": random.uniform(1.0, 1.0)
-    }
-]
 
 # Deprecated
 temperature = 0.3
@@ -559,9 +518,10 @@ agent_config = [
         "speaker_wav": r"agent_voice_samples\axis_voice_sample.wav",
         "output_dir": r"agent_voice_outputs\axis",
         "active": True,
-        "extraversion": random.uniform(1.0, 1.0) # Needs to have a value between 0 and 1.0, with higher values causing the agent to speak more often.
+        "extraversion": random.uniform(1.0, 1.0), # Needs to have a value between 0 and 1.0, with higher values causing the agent to speak more often.
         "extroversion": random.uniform(1.0, 1.0) # Needs to have a value between 0 and 1.0, with higher values causing the agent to speak more often.
     },
+    {
         "name": "fractal",
         "dialogue_list": [""],
         "speaker_wav": r"agent_voice_samples\fractal_voice_sample.wav",
@@ -684,7 +644,39 @@ async def main():
     global can_speak_event_asyncio
     global analysis_mode
     global mute_mode
-    user_memory_task = None
+        user_memory_task = None
+    
+    async def process_user_memory(agent, messages, agent_messages, user_voice_output, user_memory):
+        """
+        Process user memory and update the user memory JSON file.
+        """
+        _, _, generated_text = await asyncio.to_thread(
+            agent.generate_text,
+            messages[-2:],
+            agent_messages[-2:],
+            agent.system_prompt2,
+            (
+                "Read this message and respond in 1 sentence noting any significant details showing a deep understanding of "
+                "the user's core personality without mentioning the situation:\n\n"
+                f"{user_voice_output}\n\n"
+                "Your objective is to provide an objective, unbiased response.\n"
+                "Follow these instructions without mentioning them."
+            ),
+            context_length=2048,
+            temperature=0.7,
+            top_p=0.9,
+            top_k=0,
+        )
+    
+        if len(generated_text.split()) > 1:
+            user_memory.append(generated_text)
+    
+            if len(user_memory) > 5:
+                user_memory.pop(0)  # Remove the oldest entry
+    
+            # Asynchronously write to the JSON file
+            async with aiofiles.open('user_memory.json', 'w') as f:
+                await f.write(json.dumps(user_memory))
         
     while True:
 
@@ -706,7 +698,7 @@ async def main():
         record_audio_dialogue = threading.Thread(target=config.record_audio_output, args=(audio, AUDIO_TRANSCRIPT_FILENAME, FORMAT, CHANNELS, RATE, 1024, random_record_seconds, file_index_count, can_speak_event, model, model_name))
         record_audio_dialogue.start()
 
-        record_voice = config.record_audio(
+        config.record_audio(
             audio,
             WAVE_OUTPUT_FILENAME,
             FORMAT,
@@ -814,7 +806,7 @@ async def main():
                     )
                 )
 
-                    pass  # Placeholder for process_user_memory call
+                    await user_memory_task
                 try:
                     user_memory_task.result()
                 except Exception as e:
