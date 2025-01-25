@@ -19,13 +19,13 @@ picture = "axiom_screenshot.png"
 image = Image.open(picture)
 
 # Preprocess the inputs
-inputs = processor(text=prompt, images=image, return_tensors="pt")
+inputs = processor(text=prompt, images=image, return_tensors="pt").to(device)
 
 print("Viewing image...")
 # Generate the output
 generated_ids = model.generate(
-    input_ids=inputs["input_ids"].cuda(),
-    pixel_values=inputs["pixel_values"].cuda(),
+    input_ids=inputs["input_ids"],
+    pixel_values=inputs["pixel_values"],
     max_new_tokens=1024,
     do_sample=True,
     temperature=1,
