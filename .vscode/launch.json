@@ -1,23 +1,11 @@
 {
+    "version": "0.2.0",
     "configurations": [
         {
-            "name": "(Windows) Launch",
-            "type": "cppvsdbg",
+            "name": "Launch Program",
+            "type": "node",
             "request": "launch",
-            "program": "${workspaceFolder}/a.exe",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "console": "externalTerminal"
-        },
-        {
-            "type": "java",
-            "request": "launch",
-            "name": "Launch Java App",
-            "cwd": "${workspaceFolder}",
-            "mainClass": "your.package.MainClass",
-            "projectName": "yourProjectName"
+            "program": "${workspaceFolder}/app.js"
         }
     ]
 }
